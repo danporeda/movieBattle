@@ -72,13 +72,8 @@ const runComparison = () => {
   leftSideStats.forEach((leftStat, index) => {
     const rightStat = rightSideStats[index];
 
-    // const leftSideValue = leftStat.dataset.value;
-    // const rightSideValue = rightStat.dataset.value;
-    const leftSideValue = parseFloat(leftStat.dataset.value);
-    const rightSideValue = parseFloat(rightStat.dataset.value);
-    // console.log(`${leftSideValue} > ${rightSideValue} : ${leftSideValue > rightSideValue}`);
-    // console.log(`${typeof(leftSideValue)} ${leftSideValue} > ${typeof(rightSideValue)} ${rightSideValue} : ${leftSideValue > rightSideValue}`);
-
+    const leftSideValue = parseInt(leftStat.dataset.value);
+    const rightSideValue = parseInt(rightStat.dataset.value);
 
     if (rightSideValue > leftSideValue) {
       leftStat.classList.remove('is-primary');
@@ -91,12 +86,11 @@ const runComparison = () => {
 };
 
 const movieTemplate = (movieDetail) => {
-  const dollars = parseInt(
-    movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, '')
-  );
-  const metascore = parseInt(movieDetail.Metascore);
-  const imdbRating = parseFloat(movieDetail.imdbRating);
-  const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
+  const dollars = movieDetail.BoxOffice === "N/A" ? 0 : 
+    parseInt(movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, ''));
+  const metascore = movieDetail.Metascore === "N/A" ? 0 : parseInt(movieDetail.Metascore);
+  const imdbRating = movieDetail.imdbRating === "N/A" ? 0 : parseFloat(movieDetail.imdbRating);
+  const imdbVotes = movieDetail.imdbVotes === "N/A" ? 0 : parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
   const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
     const value = parseInt(word);
 
@@ -106,6 +100,14 @@ const movieTemplate = (movieDetail) => {
       return prev + value;
     }
   }, 0);
+
+  // const categories = [dollars,metascore,imdbRating,imdbVotes,awards];
+  // categories.forEach((value) => {
+  //   if (isNaN(value)) {
+  //     value  = 0;
+  //   }
+  //   console.log(value);
+  // })
 
   return `
   <article class="media">
